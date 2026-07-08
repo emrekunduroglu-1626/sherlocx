@@ -1,0 +1,200 @@
+{
+  "case_id": "SX-0001",
+  "release_date": "2026-07-13",
+  "difficulty": 2,
+  "language": "tr",
+  "briefing": {
+    "title": "Galeri Gecesi",
+    "setting": "İstanbul'da bir sanat galerisinin açılış gecesi, saat 22:40",
+    "crime": "Galerinin en değerli tablosu 'Kızıl Liman' açılış kokteyli sırasında çerçevesinden kesilerek çalındı.",
+    "known_facts": [
+      "Tablo 22:10'da yerindeydi (bir ziyaretçinin fotoğrafında görülüyor).",
+      "Hırsızlık 22:10 - 22:40 arasında gerçekleşti.",
+      "Arka kapı alarmı 22:25'te 40 saniyeliğine devre dışı kalmış.",
+      "Galeri o gece davetliler dışında kimseyi almadı."
+    ]
+  },
+  "solution": {
+    "culprit_id": "sus_03",
+    "motive": "Kumar borcu — tabloyu önceden anlaştığı bir koleksiyoncuya satacaktı.",
+    "method": "Alarm paneline erişimi olan tek kişi olarak arka kapı alarmını kısa süreliğine kapattı, tabloyu kesip dışarıdaki komplisine verdi.",
+    "key_evidence_id": "ev_04",
+    "reveal_narrative": "Deniz, alarm paneline erişimi olan tek kişiydi. 22:25'teki 40 saniyelik kesinti onun kartıyla yapıldı. 'Bütün gece bardaydım' dedi ama barmen 22:20-22:30 arasında onu görmedi. Kumar borcunu kapatmak için tabloyu önceden anlaştığı bir alıcıya sattı."
+  },
+  "timeline": [
+    {
+      "time": "22:10",
+      "event": "Tablo yerinde (fotoğraf kanıtı)",
+      "witnessed_by": [
+        "sus_01",
+        "sus_02"
+      ]
+    },
+    {
+      "time": "22:20",
+      "event": "sus_03 bardan ayrılıyor",
+      "witnessed_by": [
+        "sus_04"
+      ]
+    },
+    {
+      "time": "22:25",
+      "event": "Arka kapı alarmı 40 sn devre dışı",
+      "witnessed_by": []
+    },
+    {
+      "time": "22:30",
+      "event": "sus_03 bara geri dönüyor, terli ve gergin",
+      "witnessed_by": [
+        "sus_04"
+      ]
+    },
+    {
+      "time": "22:40",
+      "event": "Hırsızlık fark ediliyor",
+      "witnessed_by": [
+        "sus_01",
+        "sus_02",
+        "sus_03",
+        "sus_04"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev_01",
+      "name": "Ziyaretçi fotoğrafı",
+      "detail": "22:10'da tabloyu ve önünde duran sus_01'i gösteriyor.",
+      "discoverable_via": "Herhangi bir şüpheliye fotoğraf/zaman sorusu"
+    },
+    {
+      "id": "ev_02",
+      "name": "Alarm kaydı",
+      "detail": "22:25'te personel kartıyla 40 saniyelik manuel kapatma.",
+      "discoverable_via": "sus_02'ye güvenlik/alarm sorusu"
+    },
+    {
+      "id": "ev_03",
+      "name": "Barmen ifadesi",
+      "detail": "sus_03, 22:20-22:30 arasında barda değildi.",
+      "discoverable_via": "sus_04'e bar/kim neredeydi sorusu"
+    },
+    {
+      "id": "ev_04",
+      "name": "Alarm paneli erişim listesi",
+      "detail": "Panele erişim kartı olan tek davetli: sus_03 (eski galeri müdürü).",
+      "discoverable_via": "sus_02'ye 'panele kimin erişimi var' sorusu — KİLİT KANIT"
+    }
+  ],
+  "suspects": [
+    {
+      "id": "sus_01",
+      "name": "Selin Arda",
+      "role": "Galeri sahibi",
+      "personality": "Kontrolcü, imajına düşkün, panik halinde. Kısa ve sinirli cümleler kurar.",
+      "is_culprit": false,
+      "knows": [
+        "ev_01",
+        "Sigorta değerinin yüksek olduğunu",
+        "sus_03'ün eskiden burada müdür olarak çalıştığını ve kötü ayrıldığını"
+      ],
+      "hides": [
+        "Galerinin mali kriz içinde olduğunu — sigorta şüphesi üstüne gelmesin diye"
+      ],
+      "lies": [
+        {
+          "lie_id": "lie_0101",
+          "claim": "Galerinin mali durumu gayet iyi.",
+          "truth": "Tamam, galeri iflasın eşiğinde. Ama bu tabloyu çalmam için sebep değil, sigorta zaten her şeyi karşılıyordu!",
+          "breaks_under": "Mali kayıtlar, kredi veya borç hakkında ısrarlı ikinci soru",
+          "contradicted_by": null
+        }
+      ],
+      "pressure_threshold": 2,
+      "red_herring": "Sigorta parası motifi — oyuncuyu yanlış yöne çeker ama alarm kanıtı onu aklar (22:25'te sahnede konuşma yapıyordu, 30+ tanık)."
+    },
+    {
+      "id": "sus_02",
+      "name": "Murat Kaya",
+      "role": "Güvenlik şefi",
+      "personality": "Asker disiplini, az konuşur, prosedür diliyle cevap verir. İşini kaybetme korkusu var.",
+      "is_culprit": false,
+      "knows": [
+        "ev_02",
+        "ev_04",
+        "Alarm sisteminin nasıl çalıştığını"
+      ],
+      "hides": [
+        "O saatte kamera odasında değil sigara molasında olduğunu"
+      ],
+      "lies": [
+        {
+          "lie_id": "lie_0201",
+          "claim": "Bütün gece kamera odasındaydım.",
+          "truth": "Peki, itiraf ediyorum: 22:20-22:35 arası sigara molasındaydım, kamera odasında değildim.",
+          "breaks_under": "Kamera kayıtlarında neden boşluk var / o anda ne gördün sorusu",
+          "contradicted_by": null
+        }
+      ],
+      "pressure_threshold": 2,
+      "red_herring": null
+    },
+    {
+      "id": "sus_03",
+      "name": "Deniz Yalın",
+      "role": "Eski galeri müdürü, davetli",
+      "personality": "Çekici, espirili, soruları şakayla savuşturur. Köşeye sıkışınca saldırganlaşır.",
+      "is_culprit": true,
+      "knows": [
+        "Alarm panelinin yerini ve kodunu",
+        "Tablonun gerçek piyasa değerini"
+      ],
+      "hides": [
+        "Kumar borcunu",
+        "Alarm kartının hâlâ aktif olduğunu",
+        "22:20-22:30 arasında nerede olduğunu"
+      ],
+      "lies": [
+        {
+          "lie_id": "lie_0301",
+          "claim": "Bütün gece bardaydım, barmen şahidim.",
+          "truth": "Tamam, 22:20-22:30 arasında barda değildim. Biraz hava almaya çıktım, hepsi bu!",
+          "breaks_under": "Barmen ifadesiyle yüzleştirme",
+          "contradicted_by": "ev_03"
+        },
+        {
+          "lie_id": "lie_0302",
+          "claim": "Alarm kartım işten ayrılınca iptal edildi.",
+          "truth": "Kartım... evet, hâlâ aktif olabilir. İK iptal etmeyi unutmuş olmalı, benim suçum değil!",
+          "breaks_under": "Erişim listesiyle yüzleştirme",
+          "contradicted_by": "ev_04"
+        }
+      ],
+      "pressure_threshold": 3,
+      "red_herring": null
+    },
+    {
+      "id": "sus_04",
+      "name": "Ece Toprak",
+      "role": "Barmen (etkinlik personeli)",
+      "personality": "Gözlemci, dedikoducu, konuşkan. Sorulmadan bile detay verir.",
+      "is_culprit": false,
+      "knows": [
+        "ev_03",
+        "sus_03'ün gece boyunca dört kadeh içtiğini ve gergin olduğunu",
+        "sus_01 ile sus_03'ün girişte tartıştığını"
+      ],
+      "hides": [],
+      "lies": [],
+      "pressure_threshold": 1
+    }
+  ],
+  "game_config": {
+    "free_question_limit": 15,
+    "premium_question_limit": 25,
+    "max_answer_sentences": 3,
+    "accusation_requires_evidence": true,
+    "hint_after_questions": 10,
+    "hint_text": "Alarm o gece kendi kendine kapanmadı. Panele kimin erişimi vardı?"
+  }
+}

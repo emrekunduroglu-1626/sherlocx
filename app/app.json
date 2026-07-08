@@ -1,0 +1,13 @@
+{
+  "expo": {
+    "name": "SherlocX",
+    "slug": "sherlocx",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#0B1226",
+    "splash": { "backgroundColor": "#0B1226", "resizeMode": "contain" },
+    "ios": { "bundleIdentifier": "com.sherlocx.app", "supportsTablet": false },
+    "android": { "package": "com.sherlocx.app" }
+  }
+}
