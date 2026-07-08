@@ -24,6 +24,9 @@ export default function ResultScreen({ navigation }: Props) {
           ? `${g.questionsUsed} soruda çözdün, dedektif.`
           : "Bu sefer olmadı. Yarın yeni bir vaka seni bekliyor."}
       </Text>
+      {g.solved && g.streak > 0 && (
+        <Text style={s.streak}>🔥 Seri: {g.streak} gün{g.streak === g.bestStreak ? " — rekorun!" : ""}</Text>
+      )}
 
       {g.reveal && (
         <View style={s.revealBox}>
@@ -49,6 +52,7 @@ const s = StyleSheet.create({
   wrap: { flex: 1 },
   verdict: { fontSize: 32, fontWeight: "900", letterSpacing: 1, textAlign: "center", marginTop: spacing.l },
   stat: { color: colors.muted, textAlign: "center", marginTop: spacing.s, fontSize: 15 },
+  streak: { color: colors.amber, textAlign: "center", marginTop: spacing.s, fontSize: 16, fontWeight: "800" },
   revealBox: {
     backgroundColor: colors.card, borderRadius: radius.m, padding: spacing.m, marginTop: spacing.l,
   },

@@ -1,0 +1,102 @@
+{
+  "case_id": "SX-0003",
+  "release_date": "2026-07-15",
+  "difficulty": 4,
+  "language": "tr",
+  "briefing": {
+    "title": "Lansman Gecesi",
+    "setting": "Ankara'da bir yazılım şirketi, ürün lansmanından önceki gece, 23:30",
+    "crime": "Sabah tanıtılacak ürünün demo sunucusu sabote edildi; veritabanı ve yedekler silindi.",
+    "known_facts": [
+      "Silme komutu 23:12'de root yetkisiyle çalıştırıldı.",
+      "O saatte binada kartlı girişe göre yalnızca iki kişi vardı.",
+      "Saldırı içeriden yapıldı — VPN kaydı yok.",
+      "Yedekleme sistemi de aynı dakikada silindi; saldırgan sistemi iyi tanıyor."
+    ]
+  },
+  "solution": {
+    "culprit_id": "sus_03",
+    "motive": "Ertesi gün işten çıkarılacağını gizlice öğrendi; şirketin en büyük gecesini mahvederek intikam aldı.",
+    "method": "Root yetkisiyle 23:12'de silme betiğini çalıştırdı; yedekleri kendi yazdığı bakım betiğinin imzasını taşıyan komutla sildi.",
+    "key_evidence_id": "ev_05",
+    "reveal_narrative": "Onur, işten çıkarma listesinde adını görünce lansmanı hedef aldı. 23:12'deki silme komutu root yetkisi gerektiriyordu ve o saatte binada olan iki kişiden yalnızca onda bu yetki vardı. Asıl imza yedeklerdeydi: silme komutu, Onur'un yıllar önce yazdığı bakım betiğinin kendine özgü parametre dizilimini taşıyordu. 'Evdeydim' yalanı kartlı giriş kaydıyla, 'root şifresini bilmiyorum' yalanı yetki listesiyle çöktü."
+  },
+  "timeline": [
+    { "time": "22:40", "event": "sus_04 ofisten çıkıyor (kartlı çıkış)", "witnessed_by": ["sus_02"] },
+    { "time": "22:55", "event": "sus_01 rakip firma yöneticisiyle telefonda konuşuyor", "witnessed_by": [] },
+    { "time": "23:05", "event": "sus_02, sus_03'ü sunucu odası koridorunda görüyor", "witnessed_by": ["sus_02"] },
+    { "time": "23:12", "event": "Silme komutu çalıştırılıyor (root)", "witnessed_by": [] },
+    { "time": "23:30", "event": "Sabotaj fark ediliyor", "witnessed_by": ["sus_01", "sus_02", "sus_03"] }
+  ],
+  "evidence": [
+    { "id": "ev_01", "name": "Sistem logu", "detail": "Silme komutu 23:12'de root yetkisiyle, sunucu odasındaki konsoldan çalıştırıldı.", "discoverable_via": "Stajyere veya sistem yöneticisine log sorusu" },
+    { "id": "ev_02", "name": "Kartlı giriş kaydı", "detail": "23:12'de binada yalnızca Onur ve stajyer Elif vardı; Onur'un kartı 23:50'ye kadar çıkış göstermiyor.", "discoverable_via": "Stajyere bina/giriş sorusu" },
+    { "id": "ev_03", "name": "Stajyerin tanıklığı", "detail": "Elif 23:05'te Onur'u sunucu odası koridorunda gördü; Onur onu görünce yön değiştirdi.", "discoverable_via": "Stajyere o gece kimi gördüğü sorusu" },
+    { "id": "ev_04", "name": "Yetki listesi", "detail": "Root şifresine erişimi olan tek aktif çalışan sistem yöneticisi Onur.", "discoverable_via": "CTO'ya yetki/root sorusu" },
+    { "id": "ev_05", "name": "Betik imzası", "detail": "Yedekleri silen komut, Onur'un yazdığı bakım betiğinin kendine özgü parametre dizilimini birebir taşıyor.", "discoverable_via": "CTO'ya yedekler nasıl silindi sorusu — KİLİT KANIT" },
+    { "id": "ev_06", "name": "Takvim kaydı", "detail": "Deniz'in takviminde rakip firma CEO'suyla iki gizli görüşme kaydı var.", "discoverable_via": "Pazarlama müdürüne CTO'nun görüşmeleri sorusu" }
+  ],
+  "suspects": [
+    {
+      "id": "sus_01",
+      "name": "Deniz Aksoy",
+      "role": "CTO",
+      "personality": "Kendinden emin, teknik jargonla konuşur, sıkışınca kurumsal dile kaçar.",
+      "is_culprit": false,
+      "knows": ["ev_04", "ev_05", "Sistemin mimarisini"],
+      "hides": ["Rakip firmayla iş görüşmesi yaptığını — istifa etmek üzereydi"],
+      "lies": [
+        { "lie_id": "lie_0111", "claim": "Rakip firmayla hiçbir temasım olmadı.", "truth": "Tamam, evet, iş görüşmesi yaptım. İstifa edecektim ama bunun sabotajla ilgisi yok!", "breaks_under": "Takvim kaydıyla yüzleştirme", "contradicted_by": "ev_06" }
+      ],
+      "pressure_threshold": 2,
+      "red_herring": "Rakiple gizli görüşmeler onu baş şüpheli gibi gösterir — ama 23:12'de binada bile değildi (kartlı giriş kaydı onu aklar)."
+    },
+    {
+      "id": "sus_02",
+      "name": "Elif Kaya",
+      "role": "Stajyer",
+      "personality": "Heyecanlı, yardımsever, gördüğünü olduğu gibi anlatır ama çekingen.",
+      "is_culprit": false,
+      "knows": ["ev_01", "ev_02", "ev_03"],
+      "hides": ["O gece izinsiz fazla mesaide kaldığını — başı derde girsin istemiyor"],
+      "lies": [],
+      "pressure_threshold": 1,
+      "red_herring": null
+    },
+    {
+      "id": "sus_03",
+      "name": "Onur Şahin",
+      "role": "Sistem yöneticisi",
+      "personality": "Soğukkanlı, az konuşur, teknik detayla oyalar; sıkışınca alaycılaşır.",
+      "is_culprit": true,
+      "knows": ["Root şifresini", "Yedekleme sisteminin zayıf noktalarını", "İşten çıkarma listesini gizlice gördüğünü"],
+      "hides": ["İşten çıkarılacağını bildiğini", "23:05'te sunucu odası koridorunda olduğunu"],
+      "lies": [
+        { "lie_id": "lie_0131", "claim": "23:00'ten önce eve gittim, gece binada değildim.", "truth": "Peki... binadaydım. Ama sunucu odasına girmedim, sadece eşyalarımı topluyordum!", "breaks_under": "Kartlı giriş kaydıyla yüzleştirme", "contradicted_by": "ev_02" },
+        { "lie_id": "lie_0132", "claim": "Root şifresi geçen ay değişti, yenisini bilmiyorum.", "truth": "Şifreyi biliyorum, tamam! Sistem yöneticisiyim, bilmemem imkânsız. Ama bilmek kullanmak değildir!", "breaks_under": "Yetki listesiyle yüzleştirme", "contradicted_by": "ev_04" }
+      ],
+      "pressure_threshold": 3,
+      "red_herring": null
+    },
+    {
+      "id": "sus_04",
+      "name": "Selin Yurt",
+      "role": "Pazarlama müdürü",
+      "personality": "Konuşkan, ofis dedikodularına hâkim, herkes hakkında fikri var.",
+      "is_culprit": false,
+      "knows": ["ev_06", "Onur'un son haftalarda çok sessizleştiğini", "Lansmanın şirket için ölüm kalım meselesi olduğunu"],
+      "hides": [],
+      "lies": [],
+      "pressure_threshold": 1,
+      "red_herring": null
+    }
+  ],
+  "game_config": {
+    "free_question_limit": 15,
+    "premium_question_limit": 25,
+    "max_answer_sentences": 3,
+    "accusation_requires_evidence": true,
+    "hint_after_questions": 12,
+    "hint_text": "Yedekleri silen komutun bir imzası var. CTO'ya nasıl silindiğini sor."
+  }
+}

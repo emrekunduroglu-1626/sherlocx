@@ -170,7 +170,7 @@
           "contradicted_by": "ev_04"
         }
       ],
-      "pressure_threshold": 3,
+      "pressure_threshold": 2,
       "red_herring": null
     },
     {

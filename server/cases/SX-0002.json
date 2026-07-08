@@ -1,0 +1,158 @@
+{
+  "case_id": "SX-0002",
+  "release_date": "2026-07-14",
+  "difficulty": 1,
+  "language": "tr",
+  "briefing": {
+    "title": "Kayıp Yüzük",
+    "setting": "Çeşme'de bir sahil düğünü, nikahtan yarım saat önce",
+    "crime": "Nikah yüzükleri, damat odasındaki kadife kutusundan kayboldu.",
+    "known_facts": [
+      "Yüzükler 19:30'da kutudaydı (fotoğrafçının karesinde görülüyor).",
+      "Kayıp 19:30 - 20:00 arasında fark edildi.",
+      "Damat odasına o aralıkta yalnızca düğün ekibi girebiliyordu.",
+      "Odada zorlama izi yok — kapıyı bilen biri girdi."
+    ]
+  },
+  "solution": {
+    "culprit_id": "sus_01",
+    "motive": "Kumar borcu — yüzükleri düğünden sonra rehinciye götürecekti.",
+    "method": "Sağdıç olarak odaya girme hakkı vardı; 19:45'te tek başına girip kutuyu ceketinin iç cebine koydu.",
+    "key_evidence_id": "ev_03",
+    "reveal_narrative": "Kaan, sağdıç sıfatıyla kimsenin şüphelenmeyeceği tek kişiydi. 19:45'te odaya tek başına girdi; fotoğrafçının 19:46'da çektiği karede ceketinin iç cebindeki kutu şekli net görülüyor. Kumar borcunu kapatmak için yüzükleri düğün sonrası satmayı planlıyordu."
+  },
+  "timeline": [
+    {
+      "time": "19:30",
+      "event": "Yüzükler kutuda (fotoğraf kanıtı)",
+      "witnessed_by": [
+        "sus_02"
+      ]
+    },
+    {
+      "time": "19:45",
+      "event": "sus_01 damat odasına tek başına giriyor",
+      "witnessed_by": [
+        "sus_02"
+      ]
+    },
+    {
+      "time": "19:46",
+      "event": "sus_01 odadan çıkıyor, ceketi kabarık",
+      "witnessed_by": [
+        "sus_02"
+      ]
+    },
+    {
+      "time": "20:00",
+      "event": "Kayıp fark ediliyor",
+      "witnessed_by": [
+        "sus_01",
+        "sus_02",
+        "sus_03"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev_01",
+      "name": "19:30 fotoğrafı",
+      "detail": "Yüzükler 19:30'da kutunun içinde, damat odasında.",
+      "discoverable_via": "Fotoğrafçıya fotoğraf/zaman sorusu"
+    },
+    {
+      "id": "ev_02",
+      "name": "Fotoğrafçının tanıklığı",
+      "detail": "Kaan 19:45'te damat odasına tek başına girdi, bir dakika sonra çıktı.",
+      "discoverable_via": "Fotoğrafçıya oda/giriş sorusu"
+    },
+    {
+      "id": "ev_03",
+      "name": "19:46 karesi",
+      "detail": "Fotoğrafçının 19:46 karesinde Kaan'ın ceketinin iç cebinde kutu şeklinde bir kabarıklık görülüyor.",
+      "discoverable_via": "Fotoğrafçıya Kaan'ın ceketi/çıkışı sorusu — KİLİT KANIT"
+    },
+    {
+      "id": "ev_04",
+      "name": "Borç dedikodusu",
+      "detail": "Kaan'ın ciddi kumar borcu var; geçen ay Baran'dan borç istedi.",
+      "discoverable_via": "Baran'a Kaan'ın maddi durumu sorusu"
+    }
+  ],
+  "suspects": [
+    {
+      "id": "sus_01",
+      "name": "Kaan Demirel",
+      "role": "Sağdıç",
+      "personality": "Şakacı, samimi görünür, sıkışınca abartılı savunmaya geçer.",
+      "is_culprit": true,
+      "knows": [
+        "Damat odasının kapı şifresini",
+        "Yüzüklerin değerini"
+      ],
+      "hides": [
+        "Kumar borcunu",
+        "19:45'te odaya girdiğini"
+      ],
+      "lies": [
+        {
+          "lie_id": "lie_0101",
+          "claim": "Nikah alanından hiç ayrılmadım, odaya girmedim.",
+          "truth": "Tamam, odaya girdim ama sadece kravatımı düzeltmek içindi!",
+          "breaks_under": "Fotoğrafçının tanıklığıyla yüzleştirme",
+          "contradicted_by": "ev_02"
+        },
+        {
+          "lie_id": "lie_0102",
+          "claim": "Maddi durumum gayet iyi, borcum yok.",
+          "truth": "Evet, borcum var... Baran'dan da istedim. Ama bu beni hırsız yapmaz!",
+          "breaks_under": "Borç dedikodusuyla yüzleştirme",
+          "contradicted_by": "ev_04"
+        }
+      ],
+      "pressure_threshold": 1,
+      "red_herring": null
+    },
+    {
+      "id": "sus_02",
+      "name": "Melis Aydın",
+      "role": "Düğün fotoğrafçısı",
+      "personality": "Detaycı, gözünden hiçbir şey kaçmaz, net ve hızlı konuşur.",
+      "is_culprit": false,
+      "knows": [
+        "ev_01",
+        "ev_02",
+        "ev_03"
+      ],
+      "hides": [],
+      "lies": [],
+      "pressure_threshold": 1,
+      "red_herring": null
+    },
+    {
+      "id": "sus_03",
+      "name": "Baran Koç",
+      "role": "Gelinin kardeşi",
+      "personality": "Sessiz, ağırbaşlı, doğrudan sorulunca dürüst cevap verir.",
+      "is_culprit": false,
+      "knows": [
+        "ev_04",
+        "Kaan'ın son aylarda gergin olduğunu"
+      ],
+      "hides": [
+        "Kaan'a borç vermeyi reddettiğini — aralarının bozulmasını istemiyor"
+      ],
+      "lies": [],
+      "pressure_threshold": 1,
+      "red_herring": null
+    }
+  ],
+  "game_config": {
+    "free_question_limit": 15,
+    "premium_question_limit": 25,
+    "max_answer_sentences": 3,
+    "accusation_requires_evidence": false,
+    "hint_after_questions": 8,
+    "hint_text": "Fotoğrafçının makinesi her şeyi görür. 19:46 karesini sor."
+  }
+}

@@ -18,7 +18,7 @@ function msToNextUtcMidnight(): string {
 }
 
 export default function HomeScreen({ navigation }: Props) {
-  const { loadCase, caseNo, briefing, accused, solved } = useGame();
+  const { loadCase, caseNo, briefing, accused, solved, streak } = useGame();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [countdown, setCountdown] = useState(msToNextUtcMidnight());
@@ -50,7 +50,10 @@ export default function HomeScreen({ navigation }: Props) {
 
   return (
     <View style={s.wrap}>
-      <Text style={s.caseNo}>VAKA #{caseNo}</Text>
+      <View style={s.topRow}>
+        <Text style={s.caseNo}>VAKA #{caseNo}</Text>
+        {streak > 0 && <Text style={s.streak}>🔥 {streak} gün</Text>}
+      </View>
       <Text style={s.title}>{briefing?.title}</Text>
       <Text style={s.muted}>{briefing?.setting}</Text>
 
@@ -71,7 +74,9 @@ export default function HomeScreen({ navigation }: Props) {
 const s = StyleSheet.create({
   wrap: { flex: 1, padding: spacing.l, justifyContent: "center" },
   center: { flex: 1, alignItems: "center", justifyContent: "center", padding: spacing.l },
-  caseNo: { color: colors.amber, fontWeight: "800", letterSpacing: 2, marginBottom: spacing.s },
+  topRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: spacing.s },
+  caseNo: { color: colors.amber, fontWeight: "800", letterSpacing: 2 },
+  streak: { color: colors.amber, fontWeight: "800", fontSize: 15 },
   title: { color: colors.text, fontSize: 34, fontWeight: "800", marginBottom: spacing.s },
   muted: { color: colors.muted, fontSize: 15, marginTop: spacing.s },
   err: { color: colors.danger, fontSize: 16, textAlign: "center" },

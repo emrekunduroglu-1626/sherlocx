@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { getCaseById, getTodayCase, publicView } from "../lib/caseStore";
-import { getOrCreateSession } from "../lib/session";
+import { getOrCreateSession, saveSession, getProfile, saveProfile, applyStreak } from "../lib/store";
 import { buildSuspectSystemPrompt } from "../lib/promptBuilder";
 import { callModel, isMockMode, mockAnswer } from "../lib/llm";
 import { validateAnswer } from "../lib/validator";
@@ -16,11 +16,12 @@ function clampSentences(text: string, n: number): string {
 }
 
 /** GET /api/case/today — günün vakası (çözümsüz, sırsız) + oturum durumu */
-router.get("/case/today", (req, res) => {
+router.get("/case/today", async (req, res) => {
   const deviceId = String(req.header("x-device-id") || "");
   if (!deviceId) return res.status(400).json({ error: "x-device-id header gerekli" });
   const c = getTodayCase();
-  const s = getOrCreateSession(deviceId, c);
+  const s = await getOrCreateSession(deviceId, c);
+  const profile = await getProfile(deviceId);
   res.json({
     case: publicView(c),
     session: {
@@ -30,6 +31,7 @@ router.get("/case/today", (req, res) => {
       solved: s.solved,
       slips: s.slips,
     },
+    profile: { streak: profile.streak, bestStreak: profile.bestStreak, totalSolved: profile.totalSolved },
   });
 });
 
@@ -48,7 +50,7 @@ router.post("/case/:id/ask", async (req, res) => {
   if (question.length > 300)
     return res.status(400).json({ error: "soru çok uzun (max 300 karakter)" });
 
-  const session = getOrCreateSession(deviceId, c);
+  const session = await getOrCreateSession(deviceId, c);
   if (session.accused) return res.status(403).json({ error: "vaka kapandı" });
   if (session.questionsUsed >= session.questionLimit)
     return res.status(403).json({ error: "soru hakkı bitti", code: "LIMIT" });
@@ -125,6 +127,8 @@ router.post("/case/:id/ask", async (req, res) => {
     }
   }
 
+  await saveSession(session);
+
   const hintAvailable = session.questionsUsed >= c.game_config.hint_after_questions;
 
   res.json({
@@ -138,14 +142,14 @@ router.post("/case/:id/ask", async (req, res) => {
 });
 
 /** POST /api/case/:id/accuse { suspectId } — tek atış */
-router.post("/case/:id/accuse", (req, res) => {
+router.post("/case/:id/accuse", async (req, res) => {
   const deviceId = String(req.header("x-device-id") || "");
   if (!deviceId) return res.status(400).json({ error: "x-device-id header gerekli" });
 
   const c = getCaseById(req.params.id);
   if (!c) return res.status(404).json({ error: "vaka bulunamadı" });
 
-  const session = getOrCreateSession(deviceId, c);
+  const session = await getOrCreateSession(deviceId, c);
   if (session.accused) return res.status(403).json({ error: "zaten suçlama yapıldı" });
 
   const { suspectId } = req.body ?? {};
@@ -154,6 +158,10 @@ router.post("/case/:id/accuse", (req, res) => {
 
   session.accused = true;
   session.solved = suspectId === c.solution.culprit_id;
+  await saveSession(session);
+
+  const profile = applyStreak(await getProfile(deviceId), session.solved);
+  await saveProfile(profile);
 
   const caseNo = parseInt(c.case_id.replace(/\D/g, ""), 10) || 0;
   const shareText = session.solved
@@ -166,6 +174,8 @@ router.post("/case/:id/accuse", (req, res) => {
     reveal: c.solution.reveal_narrative,
     culpritId: c.solution.culprit_id,
     shareText,
+    streak: profile.streak,
+    bestStreak: profile.bestStreak,
   });
 });
 

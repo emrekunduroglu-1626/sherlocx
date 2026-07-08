@@ -18,11 +18,13 @@ interface GameState {
   solved: boolean | null;
   reveal: string | null;
   shareText: string | null;
+  streak: number;
+  bestStreak: number;
 
   loadCase: (payload: any) => void;
   addTurn: (suspectId: string, q: string, a: string, slipped: boolean) => void;
   setProgress: (used: number, remaining: number, slips: Slip[], hint: string | null) => void;
-  setResult: (r: { solved: boolean; reveal: string; shareText: string; questionsUsed: number }) => void;
+  setResult: (r: { solved: boolean; reveal: string; shareText: string; questionsUsed: number; streak?: number; bestStreak?: number }) => void;
 }
 
 export const useGame = create<GameState>((set) => ({
@@ -39,6 +41,8 @@ export const useGame = create<GameState>((set) => ({
   solved: null,
   reveal: null,
   shareText: null,
+  streak: 0,
+  bestStreak: 0,
 
   loadCase: (p) =>
     set({
@@ -55,6 +59,8 @@ export const useGame = create<GameState>((set) => ({
       hint: null,
       reveal: null,
       shareText: null,
+      streak: p.profile?.streak ?? 0,
+      bestStreak: p.profile?.bestStreak ?? 0,
     }),
 
   addTurn: (suspectId, q, a, slipped) =>
@@ -73,5 +79,5 @@ export const useGame = create<GameState>((set) => ({
     set({ questionsUsed: used, slips, hint }),
 
   setResult: (r) =>
-    set({ accused: true, solved: r.solved, reveal: r.reveal, shareText: r.shareText, questionsUsed: r.questionsUsed }),
+    set((st) => ({ accused: true, solved: r.solved, reveal: r.reveal, shareText: r.shareText, questionsUsed: r.questionsUsed, streak: r.streak ?? st.streak, bestStreak: r.bestStreak ?? st.bestStreak })),
 }));
