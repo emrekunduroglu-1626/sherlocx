@@ -6,7 +6,7 @@ import { isMockMode } from "./lib/llm";
 import { storeMode } from "./lib/store";
 
 const app = express();
-app.use(cors());
+app.use(cors({ origin: true, allowedHeaders: ["content-type", "x-device-id"] }));
 app.use(express.json());
 
 app.get("/health", (_req, res) => res.json({ ok: true, llm: isMockMode() ? "mock" : "live", store: storeMode() }));

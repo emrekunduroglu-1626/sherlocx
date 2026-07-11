@@ -36,6 +36,12 @@ npx expo start                # QR ile Expo Go'da aç (iOS/Android)
 - `POST /api/case/:id/ask { suspectId, question }`
 - `POST /api/case/:id/accuse { suspectId }` — tek atış
 
+## v0.4 (Aşama 2 — mobil cihaz hazırlık)
+- [x] RN kodu ilk kez tip kontrolünden geçti (0 hata)
+- [x] CORS x-device-id header'ına açıldı (Codespaces port yönlendirme için)
+- [x] client.ts'e Codespaces/yerel IP kurulum rehberi
+- [x] Cihaz kurulum kılavuzu: docs/asama2-mobil-cihaz.md
+
 ## v0.3'te eklendi (Aşama 1 — live hazırlık)
 - [x] Prompt caching (`cache_control`) — sistem promptu cache'lenir, ~10x ucuz okuma
 - [x] Usage telemetrisi — her soruda cache HIT/MISS + token logu

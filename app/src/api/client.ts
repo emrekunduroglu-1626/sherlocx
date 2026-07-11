@@ -1,8 +1,21 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 /**
- * Geliştirme: bilgisayarının yerel IP'sini yaz (localhost cihazda çalışmaz).
- * TODO(prod): env/config'e taşı.
+ * SUNUCU ADRESİ — kurulumuna göre BİRİNİ seç:
+ *
+ * 1) Sunucu Codespaces'te çalışıyorsa (senin mevcut kurulumun):
+ *    - Codespace'te alttaki BAĞLANTI NOKTALARI (Ports) sekmesini aç
+ *    - 4000 portunun görünürlüğünü "Public" yap (sağ tık -> Port Visibility)
+ *    - Oradaki adresi kopyala, şuna benzer:
+ *      https://special-acorn-XXXX-4000.app.github.dev
+ *    - O adresi aşağıya yaz (sonda / OLMADAN)
+ *
+ * 2) Sunucu kendi bilgisayarında çalışıyorsa:
+ *    - Bilgisayarının yerel IP'sini yaz: http://192.168.1.XX:4000
+ *    - Telefon ve bilgisayar AYNI Wi-Fi'da olmalı
+ *
+ * localhost telefonda ASLA çalışmaz.
+ * TODO(prod): app.json -> expo.extra üzerinden ortam bazlı yapılandırmaya taşı.
  */
 export const BASE_URL = "http://192.168.1.100:4000";
 
