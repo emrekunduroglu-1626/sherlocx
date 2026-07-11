@@ -17,7 +17,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
  * localhost telefonda ASLA çalışmaz.
  * TODO(prod): app.json -> expo.extra üzerinden ortam bazlı yapılandırmaya taşı.
  */
-export const BASE_URL = "http://192.168.1.100:4000";
+export const BASE_URL = "https://special-acorn-4qj4vrj5475gfqv6g-4000.app.github.dev";
 
 let deviceId: string | null = null;
 
