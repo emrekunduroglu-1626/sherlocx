@@ -2,7 +2,7 @@ import { Router } from "express";
 import { getCaseById, getTodayCase, publicView } from "../lib/caseStore";
 import { getOrCreateSession, saveSession, getProfile, saveProfile, applyStreak } from "../lib/store";
 import { buildSuspectSystemPrompt } from "../lib/promptBuilder";
-import { callModel, isMockMode, mockAnswer } from "../lib/llm";
+import { callModel, isMockMode, mockAnswer, lastUsage } from "../lib/llm";
 import { validateAnswer } from "../lib/validator";
 
 const router = Router();
@@ -92,15 +92,23 @@ router.post("/case/:id/ask", async (req, res) => {
       answer = await callModel(
         process.env.SUSPECT_MODEL || "claude-haiku-4-5",
         system,
-        [...history, { role: "user", content: question.trim() }]
+        [...history, { role: "user", content: question.trim() }],
+        220,
+        true // prompt caching: sistem promptu cache'lenir
       );
+      if (lastUsage) {
+        const hit = lastUsage.cacheReadTokens > 0 ? "HIT" : "MISS";
+        console.log(`[usage] cache ${hit} | read=${lastUsage.cacheReadTokens} write=${lastUsage.cacheWriteTokens} in=${lastUsage.inputTokens} out=${lastUsage.outputTokens}`);
+      }
       const v = await validateAnswer(c, suspect, answer);
       if (v.reveals_culprit || v.breaks_character) {
         // Tek retry
         answer = await callModel(
           process.env.SUSPECT_MODEL || "claude-haiku-4-5",
           system + "\n\nUYARI: Önceki cevabın kural ihlali içeriyordu. Kurallara sadık kal.",
-          [...history, { role: "user", content: question.trim() }]
+          [...history, { role: "user", content: question.trim() }],
+          220,
+          true
         );
         const v2 = await validateAnswer(c, suspect, answer);
         if (v2.reveals_culprit || v2.breaks_character) {

@@ -6,13 +6,32 @@ export function isMockMode(): boolean {
   return !process.env.ANTHROPIC_API_KEY;
 }
 
-/** ---- Gerçek model çağrısı ---- */
+/** Son çağrının cache telemetrisi — maliyet takibi için */
+export interface Usage {
+  inputTokens: number;
+  cacheReadTokens: number;
+  cacheWriteTokens: number;
+  outputTokens: number;
+}
+export let lastUsage: Usage | null = null;
+
+/**
+ * Gerçek model çağrısı.
+ * cacheSystem=true: sistem promptu cache_control ile işaretlenir.
+ * Sabit kurallar + karakter dosyası bloğu cache'ten okunur (yaklaşık 10x ucuz),
+ * yalnızca değişen oturum verisi (soru + kısa geçmiş) taze işlenir.
+ */
 export async function callModel(
   model: string,
   system: string,
   messages: { role: "user" | "assistant"; content: string }[],
-  maxTokens = 220
+  maxTokens = 220,
+  cacheSystem = false
 ): Promise<string> {
+  const systemField = cacheSystem
+    ? [{ type: "text", text: system, cache_control: { type: "ephemeral" } }]
+    : system;
+
   const res = await fetch(API_URL, {
     method: "POST",
     headers: {
@@ -20,10 +39,19 @@ export async function callModel(
       "x-api-key": process.env.ANTHROPIC_API_KEY as string,
       "anthropic-version": "2023-06-01",
     },
-    body: JSON.stringify({ model, system, max_tokens: maxTokens, messages }),
+    body: JSON.stringify({ model, system: systemField, max_tokens: maxTokens, messages }),
   });
   if (!res.ok) throw new Error(`LLM HTTP ${res.status}: ${await res.text()}`);
   const data: any = await res.json();
+
+  const u = data.usage ?? {};
+  lastUsage = {
+    inputTokens: u.input_tokens ?? 0,
+    cacheReadTokens: u.cache_read_input_tokens ?? 0,
+    cacheWriteTokens: u.cache_creation_input_tokens ?? 0,
+    outputTokens: u.output_tokens ?? 0,
+  };
+
   return (data.content ?? [])
     .filter((b: any) => b.type === "text")
     .map((b: any) => b.text)

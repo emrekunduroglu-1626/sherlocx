@@ -9,7 +9,8 @@
     "typecheck": "tsc --noEmit",
     "case:validate": "tsx scripts/validateCase.ts",
     "case:solve": "tsx scripts/solverTest.ts",
-    "case:generate": "tsx scripts/generateCase.ts"
+    "case:generate": "tsx scripts/generateCase.ts",
+    "case:jailbreak": "tsx scripts/jailbreakTest.ts"
   },
   "dependencies": {
     "cors": "^2.8.5",

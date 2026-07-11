@@ -36,6 +36,12 @@ npx expo start                # QR ile Expo Go'da aç (iOS/Android)
 - `POST /api/case/:id/ask { suspectId, question }`
 - `POST /api/case/:id/accuse { suspectId }` — tek atış
 
+## v0.3'te eklendi (Aşama 1 — live hazırlık)
+- [x] Prompt caching (`cache_control`) — sistem promptu cache'lenir, ~10x ucuz okuma
+- [x] Usage telemetrisi — her soruda cache HIT/MISS + token logu
+- [x] Jailbreak test paketi (`case:jailbreak`) — 10 injection, mock+live
+- [x] Live geçiş kılavuzu: docs/asama1-live-gecis.md
+
 ## v0.2'de eklendi
 - [x] Redis oturum + profil deposu (`REDIS_URL` set edilince otomatik; yoksa bellek içi)
 - [x] Streak (sunucu tarafı, Wordle usulü) + Home/Result rozetleri
